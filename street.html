@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ストリート発表 | 南高祭2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'M PLUS Rounded 1c', sans-serif; }
+        .yuji { font-family: 'Yuji Syuku', serif; }
+        .vertical-separator { display: inline-block; transform: rotate(90deg); }
+
+         /* メニューのスクロール設定 */
+        #menu {
+            max-height: calc(100vh - 80px); /* 画面高さからヘッダー分を引く */
+            overflow-y: auto;               /* 縦方向のスクロールを許可 */
+            -webkit-overflow-scrolling: touch; /* iOSでのスムーズスクロール */
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+    <header class="bg-slate-800 border-b border-white/10 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center relative">
+            <a href="index.html" class="yuji text-2xl font-bold text-white hover:text-blue-300 transition">南高祭2026</a>
+            <button onclick="toggleMenu()" class="text-2xl hover:text-blue-300 transition p-2 z-50">☰</button>
+            
+            <nav id="menu" class="hidden absolute top-16 right-0 w-48 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden">
+                <a href="index.html" class="block px-6 py-3 hover:bg-slate-700 transition">ホーム</a>
+                <a href="exhibition.html" class="block px-6 py-3 hover:bg-slate-700 transition">展示一覧</a>
+                <a href="access.html" class="block px-6 py-3 hover:bg-slate-700 transition">交通アクセス</a>
+                <a href="stage.html" class="block px-6 py-3 hover:bg-slate-700 transition">ステージ発表</a>
+                <a href="street.html" class="block px-6 py-3 hover:bg-slate-700 transition text-blue-400">ストリート発表</a>
+                <a href="map.html" class="block px-6 py-3 hover:bg-slate-700 transition">会場マップ</a>
+                <a href="maigo.html" class="block px-6 py-3 hover:bg-slate-700 transition">迷子・落とし物</a>
+                <a href="rally.html" class="block px-6 py-3 hover:bg-slate-700 transition">スタンプラリー</a>
+                <a href="baza.html" class="block px-6 py-3 hover:bg-slate-700 transition">食品バザー</a>
+                <a href="rule.html" class="block px-6 py-3 hover:bg-slate-700 transition">校内ルール</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <h1 class="yuji text-4xl text-center mb-10 text-yellow-300">ストリート発表</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            <div class="bg-slate-800 p-6 rounded-2xl border-l-4 border-green-500 shadow-lg">
+                <h4 class="font-bold text-green-400 mb-2">🟢 現在公演中</h4>
+                <p id="currentName" class="text-xl font-bold">読込中...</p>
+                <p id="currentTime" class="text-sm text-slate-400 mt-1"></p>
+            </div>
+            <div class="bg-slate-800 p-6 rounded-2xl border-l-4 border-blue-500 shadow-lg">
+                <h4 class="font-bold text-blue-400 mb-2">▶ 次回公演</h4>
+                <p id="nextName" class="text-xl font-bold">読込中...</p>
+                <p id="nextTime" class="text-sm text-slate-400 mt-1"></p>
+            </div>
+        </div>
+
+        <div class="space-y-8">
+            <div>
+                <h2 class="text-2xl font-bold text-blue-300 mb-4 border-b border-slate-700 pb-2">7/4(土)</h2>
+                <div id="day1" class="space-y-4"></div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-blue-300 mb-4 border-b border-slate-700 pb-2">7/5(日)</h2>
+                <div id="day2" class="space-y-4"></div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        window.toggleMenu = () => { document.getElementById("menu").classList.toggle("hidden"); };
+
+        const db = getDatabase(initializeApp({ 
+            databaseURL: "https://nankousai2026-default-rtdb.asia-southeast1.firebasedatabase.app" 
+        }));
+
+        const schedule = [
+            { date:"2026-07-04", start:"10:15", end:"10:45", name:"書道部(1.2年)", catch:"ヒゲダンの「らしさ」に合わせて書道パフォーマンスします！" },
+            { date:"2026-07-04", start:"11:10", end:"11:40", name:"あそぶらす", catch:"吹奏楽部3年生16人によるPOPなストリートライブです。" },
+            { date:"2026-07-04", start:"11:45", end:"12:15", name:"チョッキーラップス Season2", catch:"吹部6人で結成されたストリートバンド。" },
+            { date:"2026-07-04", start:"12:20", end:"12:50", name:"SAM", catch:"吹部3年3人バンド。あの有名な曲をお届けします！" },
+            { date:"2026-07-04", start:"13:00", end:"13:30", name:"合唱部", catch:"爽やかな合唱曲とポップスをおとどけします。" },
+            { date:"2026-07-04", start:"13:40", end:"14:10", name:"中尾壮佑 solo", catch:"ギターとマイクだけを持って、弾き語る。" },
+            { date:"2026-07-04", start:"14:15", end:"14:45", name:"TOYA.", catch:"マイクを使ったビートボックスパフォーマンスです。" },
+            { date:"2026-07-05", start:"09:45", end:"10:15", name:"書道部(3年)", catch:"3年だけのパフォーマンスを1階ホールで！" },
+            { date:"2026-07-05", start:"10:25", end:"10:55", name:"美術部", catch:"その場でアートが生まれる瞬間をぜひ！" },
+            { date:"2026-07-05", start:"12:10", end:"12:40", name:"男声合唱団六華", catch:"暑さも吹き飛ぶ歌をお届けします。" }
+        ];
+
+        function updateStatus() {
+            const now = new Date();
+            let current = null;
+            let next = null;
+
+            for(const item of schedule) {
+                const s = new Date(`${item.date}T${item.start}`);
+                const e = new Date(`${item.date}T${item.end}`);
+                if (now >= s && now <= e) current = item;
+                if (now < s && !next) next = item;
+            }
+
+            document.getElementById('currentName').innerText = current ? current.name : "現在公演はありません";
+            document.getElementById('currentTime').innerText = current ? `${current.start} 〜 ${current.end}` : "";
+            document.getElementById('nextName').innerText = next ? next.name : "本日の公演は終了しました";
+            document.getElementById('nextTime').innerText = next ? `${next.start} 〜 ${next.end}` : "";
+        }
+
+        function renderSchedule() {
+            let day1 = "", day2 = "";
+            schedule.forEach(item => {
+                const html = `
+                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 flex justify-between items-center shadow-md">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-lg">${item.name}</h3>
+                            <p class="text-sm text-slate-400 mt-1">${item.catch}</p>
+                        </div>
+                        <div class="text-right ml-4 text-blue-300 font-bold leading-none">
+                            ${item.start}<br><span class="vertical-separator">〜</span><br>${item.end}
+                        </div>
+                    </div>`;
+                item.date === "2026-07-04" ? day1 += html : day2 += html;
+            });
+            document.getElementById("day1").innerHTML = day1;
+            document.getElementById("day2").innerHTML = day2;
+        }
+
+        renderSchedule();
+        updateStatus();
+        setInterval(updateStatus, 60000);
+    </script>
+</body>
+</html>
