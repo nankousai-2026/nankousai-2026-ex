@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>迷子・落とし物センター | 南高祭2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'M PLUS Rounded 1c', sans-serif; }
+        .yuji { font-family: 'Yuji Syuku', serif; }
+
+         /* メニューのスクロール設定 */
+        #menu {
+            max-height: calc(100vh - 80px); /* 画面高さからヘッダー分を引く */
+            overflow-y: auto;               /* 縦方向のスクロールを許可 */
+            -webkit-overflow-scrolling: touch; /* iOSでのスムーズスクロール */
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+    <header class="bg-slate-800 border-b border-white/10 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center relative">
+            <a href="index.html" class="yuji text-2xl font-bold text-white hover:text-blue-300 transition">南高祭2026</a>
+            <button onclick="toggleMenu()" class="text-2xl hover:text-blue-300 transition p-2 z-50">☰</button>
+            
+            <nav id="menu" class="hidden absolute top-16 right-0 w-48 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden">
+                <a href="index.html" class="block px-6 py-3 hover:bg-slate-700 transition">ホーム</a>
+                <a href="exhibition.html" class="block px-6 py-3 hover:bg-slate-700 transition">展示一覧</a>
+                <a href="access.html" class="block px-6 py-3 hover:bg-slate-700 transition">交通アクセス</a>
+                <a href="stage.html" class="block px-6 py-3 hover:bg-slate-700 transition">ステージ発表</a>
+                <a href="street.html" class="block px-6 py-3 hover:bg-slate-700 transition">ストリート発表</a>
+                <a href="map.html" class="block px-6 py-3 hover:bg-slate-700 transition">会場マップ</a>
+                <a href="maigo.html" class="block px-6 py-3 hover:bg-slate-700 transition text-blue-400">迷子・落とし物</a>
+                <a href="rally.html" class="block px-6 py-3 hover:bg-slate-700 transition">スタンプラリー</a>
+                <a href="baza.html" class="block px-6 py-3 hover:bg-slate-700 transition">食品バザー</a>
+                <a href="rule.html" class="block px-6 py-3 hover:bg-slate-700 transition">校内ルール</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-2xl mx-auto px-4 py-12">
+        <div class="text-center mb-8">
+            <h1 class="yuji text-3xl font-bold mb-2">迷子・落とし物情報センター</h1>
+        </div>
+
+        <div class="mb-8">
+            <input type="text" id="search" 
+                class="w-full p-4 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" 
+                placeholder="場所や特徴で検索...">
+        </div>
+
+        <div id="cardArea" class="grid gap-4">
+            <p class="text-center text-slate-500 py-10">データを読み込んでいます...</p>
+        </div>
+    </main>
+
+    <script>
+    // 1. デプロイしたウェブアプリのURLを貼る
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwUH-eYGZDlUB1J_DaKfjWQAhEsrlfE6VEa0EoB6lHmaQBgjFDzrY7dRSKL55jKt6ZO/exec?mode=lost_items_and_children';
+    
+    let allItems = [];
+
+    // 2. データを取得
+    async function fetchData() {
+        try {
+            const response = await fetch(GAS_URL,{
+                headers: {
+                    Accept:"application/json",
+                    "Content-Type" :"application/x-www-form-urlencoded",
+                },
+            });
+            const data = await response.json();
+            
+            // 迷子と落とし物の配列を合体させる
+            // GAS側のデータ構造に合わせて調整しています
+            const children = data.lost_children.map(c => ({ status: '迷子', title: c[0], location: c[1] }));
+            const items = data.lost_items.map(i => ({ status: '落とし物', title: i[0], location: i[1] }));
+            
+            allItems = [...children, ...items];
+            renderCards();
+        } catch (error) {
+            document.getElementById("cardArea").innerHTML = "<p class='text-center text-red-400 py-10'>現在、迷子・落とし物はありません。</p>";
+        }
+    }
+
+    // 3. 表示処理
+    function renderCards(filter = "") {
+        const area = document.getElementById("cardArea");
+        const filtered = allItems.filter(i => 
+            (i.title && i.title.includes(filter)) || 
+            (i.location && i.location.includes(filter))
+        );
+
+        if (filtered.length === 0) {
+            area.innerHTML = "<p class='text-center text-slate-500 py-10'>現在、該当する情報はありません。</p>";
+            return;
+        }
+
+        area.innerHTML = filtered.map(i => `
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3 ${i.status === '迷子' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/50' : 'bg-blue-500/20 text-blue-300 border border-blue-500/50'}">
+                    ${i.status}
+                </span>
+                <h2 class="text-xl font-bold mb-1">${i.title}</h2>
+                <p class="text-sm text-slate-300">場所: ${i.location}</p>
+            </div>
+        `).join("");
+    }
+
+    // メニュー開閉
+    window.toggleMenu = () => { document.getElementById("menu").classList.toggle("hidden"); };
+    // 検索機能
+    document.getElementById("search").oninput = (e) => renderCards(e.target.value);
+    
+    // 初回読み込み
+    fetchData();
+</script>
+</body>
+</html>
