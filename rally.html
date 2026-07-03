@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スタンプラリー詳細 | 南高祭2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'M PLUS Rounded 1c', sans-serif; }
+        .yuji { font-family: 'Yuji Syuku', serif; }
+
+         /* メニューのスクロール設定 */
+        #menu {
+            max-height: calc(100vh - 80px); /* 画面高さからヘッダー分を引く */
+            overflow-y: auto;               /* 縦方向のスクロールを許可 */
+            -webkit-overflow-scrolling: touch; /* iOSでのスムーズスクロール */
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+    <header class="bg-slate-800 border-b border-white/10 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center relative">
+            <a href="index.html" class="yuji text-2xl font-bold text-white hover:text-blue-300 transition">南高祭2026</a>
+            <button onclick="toggleMenu()" class="text-2xl hover:text-blue-300 transition p-2 z-50">☰</button>
+            
+            <nav id="menu" class="hidden absolute top-16 right-0 w-48 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden">
+                <a href="index.html" class="block px-6 py-3 hover:bg-slate-700 transition">ホーム</a>
+                <a href="exhibition.html" class="block px-6 py-3 hover:bg-slate-700 transition">展示一覧</a>
+                <a href="access.html" class="block px-6 py-3 hover:bg-slate-700 transition">交通アクセス</a>
+                <a href="stage.html" class="block px-6 py-3 hover:bg-slate-700 transition">ステージ発表</a>
+                <a href="street.html" class="block px-6 py-3 hover:bg-slate-700 transition">ストリート発表</a>
+                <a href="map.html" class="block px-6 py-3 hover:bg-slate-700 transition">会場マップ</a>
+                <a href="maigo.html" class="block px-6 py-3 hover:bg-slate-700 transition">迷子・落とし物</a>
+                <a href="rally.html" class="block px-6 py-3 hover:bg-slate-700 transition text-blue-400">スタンプラリー</a>
+                <a href="baza.html" class="block px-6 py-3 hover:bg-slate-700 transition">食品バザー</a>
+                <a href="rule.html" class="block px-6 py-3 hover:bg-slate-700 transition">校内ルール</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-12">
+        <h1 class="yuji text-4xl text-center mb-10 text-yellow-300">校内スタンプラリー開催！</h1>
+
+        <!-- ラリー概要 -->
+        <section class="bg-slate-800 p-8 rounded-3xl border border-slate-700 mb-8 shadow-lg">
+            <h2 class="text-xl font-bold mb-4 border-b border-blue-500 pb-2 text-blue-300">ラリー概要</h2>
+            <p class="leading-relaxed">南高祭を遊び尽くせ！校内の各階ホールと第二体育館に設置されたスタンプを集めよう！すべて集めると、第二体育館にて<span class="text-orange-400 font-bold">「ミニゲーム挑戦権」</span>が手に入ります。</p>
+        </section>
+
+        <!-- 参加の流れ -->
+        <section class="bg-slate-800 p-8 rounded-3xl border border-slate-700 mb-8 shadow-lg">
+            <h2 class="text-xl font-bold mb-6 border-b border-blue-500 pb-2 text-blue-300">参加の流れ</h2>
+            <div class="grid gap-4">
+                <div class="p-4 bg-slate-700/50 border-l-4 border-blue-500 rounded-r-lg">1. 各階ホールと第二体育館を巡り、スタンプをすべて押す。</div>
+                <div class="p-4 bg-slate-700/50 border-l-4 border-blue-500 rounded-r-lg">2. コンプリートした台紙を第二体育館の受付へ持っていく。</div>
+                <div class="p-4 bg-slate-700/50 border-l-4 border-blue-500 rounded-r-lg">3. 体育館内の特設会場でミニゲームに挑戦！</div>
+                <div class="p-4 bg-slate-700/50 border-l-4 border-blue-500 rounded-r-lg">4. 成績に応じて豪華景品をゲット！</div>
+            </div>
+        </section>
+
+        <!-- 注意事項 -->
+        <section class="bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-lg">
+            <h2 class="text-xl font-bold mb-4 border-b border-blue-500 pb-2 text-blue-300">注意事項</h2>
+            <ul class="list-disc list-inside space-y-2 text-slate-300">
+                <li>台紙はパンフレットについています。</li>
+                <li>パンフレットは玄関と1Fインフォメーションボックスにて配布中</li>
+                <li>スタンプラリーの景品は数に限りがあります。</li>
+                <li>ゲームへの挑戦はコンプリートした台紙1枚につき1回までです。</li>
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        window.toggleMenu = () => { document.getElementById("menu").classList.toggle("hidden"); };
+    </script>
+</body>
+</html>
